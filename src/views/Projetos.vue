@@ -42,27 +42,31 @@
   </section>
 </template>
 <script lang="ts">
-import IProjeto from "@/Interface/IProjeto";
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
+import { useStore } from "@/store";
 
 export default defineComponent({
   name: "Projetos",
   data() {
     return {
       nomeDoProjeto: "",
-      projetos: [] as IProjeto[]
     };
   },
   methods: {
     salvar() {
-      const projeto: IProjeto = {
-        nome: this.nomeDoProjeto,
-        id: new Date().toISOString(),
-      };
-      this.projetos.push(projeto); //adicionando projetos em uma lista
-      this.nomeDoProjeto = '' //ls
+      // Chama a multation para adicionar o projeto na lista de projetos.
+      this.store.commit('ADICIONA_PROJETO', this.nomeDoProjeto);
+      this.nomeDoProjeto = '';
     },
   },
+  setup () {
+    const store = useStore()
+    return {
+      store,
+      // retorna a lista de projetos atualizadas , vindo do store
+      projetos: computed(() => store.state.projetos)
+    }
+  }
 });
 </script>
 
