@@ -4,6 +4,7 @@
       <BarraLateral  @aoTemaAlterado="trocarTema"/>
     </div>
     <div class="column is-three-quarter conteudo">
+      <!-- Define onde o view-router renderizará as views. -->
       <router-view></router-view>
     </div>
   </main>
