@@ -15,7 +15,12 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { useStore } from "@/store";
-import { ADICIONA_PROJETO, ALTERA_PROJETO } from "@/store/tipo-multacoes";
+import {
+  ADICIONA_PROJETO,
+  ALTERA_PROJETO
+} from "@/store/tipo-multacoes";
+import { TipoNotificacao } from "@/Interface/INotificacao";
+import useNotificador from '../../hooks/notificador';
 
 export default defineComponent({
   name: "Formulario",
@@ -27,12 +32,14 @@ export default defineComponent({
   props: {
     id: {
       type: String,
-    }
+    },
   },
   mounted() {
     if (this.id) {
-      const projeto = this.store.state.projetos.find(proj => proj.id === this.id);
-      this.nomeDoProjeto = projeto?.nome || '';
+      const projeto = this.store.state.projetos.find(
+        (proj) => proj.id === this.id
+      );
+      this.nomeDoProjeto = projeto?.nome || "";
     }
   },
   methods: {
@@ -41,21 +48,24 @@ export default defineComponent({
         //edição
         this.store.commit(ALTERA_PROJETO, {
           id: this.id,
-          nome: this.nomeDoProjeto
-        })
+          nome: this.nomeDoProjeto,
+        });
       } else {
         // Chama a multation para adicionar o projeto na lista de projetos.
         this.store.commit(ADICIONA_PROJETO, this.nomeDoProjeto);
-        this.nomeDoProjeto = "";
-        // fazer redirect
+        this.notificar(TipoNotificacao.SUCESSO, 'Sucesso', 'Projeto Salvo com Sucesso')
       }
+      this.nomeDoProjeto = "";
+      // fazer redirect
       this.$router.push("/projetos");
-    },
+    }
   },
   setup() {
     const store = useStore();
+    const { notificar } = useNotificador();
     return {
       store,
+      notificar
       // retorna a lista de projetos atualizadas , vindo do store
       // projetos: computed(() => store.state.projetos)
     };
