@@ -15,6 +15,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { useStore } from "@/store";
+import { ADICIONA_PROJETO, ALTERA_PROJETO } from "@/store/tipo-multacoes";
 
 export default defineComponent({
   name: "Formulario",
@@ -38,13 +39,13 @@ export default defineComponent({
     salvar() {
       if (this.id) {
         //edição
-        this.store.commit('ALTERA_PROJETO', {
+        this.store.commit(ALTERA_PROJETO, {
           id: this.id,
           nome: this.nomeDoProjeto
         })
       } else {
         // Chama a multation para adicionar o projeto na lista de projetos.
-        this.store.commit("ADICIONA_PROJETO", this.nomeDoProjeto);
+        this.store.commit(ADICIONA_PROJETO, this.nomeDoProjeto);
         this.nomeDoProjeto = "";
         // fazer redirect
       }
