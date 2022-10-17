@@ -1,4 +1,5 @@
 <template>
+  <Notification/>
   <div class="projetos">
     <h1 class="title">Projetos</h1>
     <!-- todas as rotas filhas serão renderizadas aqui -->
@@ -8,9 +9,13 @@
 <script lang="ts">
 
 import { defineComponent } from "vue";
+import Notification from '../components/Notificacoes.vue';
 
 export default defineComponent({
   name: "Projetos",
+  components :{
+    Notification
+  }
   }
 );
 </script>
