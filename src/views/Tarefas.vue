@@ -46,6 +46,5 @@ export default defineComponent({
 .lista {
     padding: 1.25rem;
 }
-
 </style>
   
