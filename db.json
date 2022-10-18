@@ -1,0 +1,12 @@
+{
+  "projetos": [
+    {
+      "id": 1,
+      "nome": "json-server"
+    },
+    {
+      "id": 2,
+      "nome": "Vue"
+    }
+  ]
+}

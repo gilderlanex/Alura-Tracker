@@ -15,12 +15,9 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { useStore } from "@/store";
-import {
-  ADICIONA_PROJETO,
-  ALTERA_PROJETO
-} from "@/store/tipo-multacoes";
 import { TipoNotificacao } from "@/Interface/INotificacao";
 import useNotificador from '../../hooks/notificador';
+import { ALTERAR_PROJETO, CADASTRAR_PROJETOS } from "@/store/tipo-acoes";
 
 export default defineComponent({
   name: "Formulario",
@@ -46,16 +43,19 @@ export default defineComponent({
     salvar() {
       if (this.id) {
         //edição
-        this.store.commit(ALTERA_PROJETO, {
+        this.store.dispatch(ALTERAR_PROJETO, {
           id: this.id,
           nome: this.nomeDoProjeto,
-        });
+        }).then(() => this.successRequests());
       } else {
         // Chama a multation para adicionar o projeto na lista de projetos.
-        this.store.commit(ADICIONA_PROJETO, this.nomeDoProjeto);
-        this.notificar(TipoNotificacao.SUCESSO, 'Sucesso', 'Projeto Salvo com Sucesso')
+        this.store.dispatch(CADASTRAR_PROJETOS, this.nomeDoProjeto)
+          .then(() => this.successRequests())
       }
+    },
+    successRequests() {
       this.nomeDoProjeto = "";
+      this.notificar(TipoNotificacao.SUCESSO, 'Sucesso', 'Projeto Salvo com Sucesso');
       // fazer redirect
       this.$router.push("/projetos");
     }

@@ -49,17 +49,19 @@
 import { computed, defineComponent } from "vue";
 import { useStore } from "@/store";
 import { EXCLUIR_PROJETO } from "@/store/tipo-multacoes";
+import { OBTER_PROJETOS, REMOVER_PROJETO } from "@/store/tipo-acoes";
 
 export default defineComponent({
   name: "Lista",
-  methods : {
-    excluir (id: string){
-      this.store.commit(EXCLUIR_PROJETO, id);
-
+  methods: {
+    excluir(id: string) {
+      this.store.dispatch(REMOVER_PROJETO, id)
     }
   },
   setup() {
-    const store = useStore()
+    const store = useStore();
+    // disparar ação
+    store.dispatch(OBTER_PROJETOS)
     return {
       // retorna a lista de projetos atualizadas , vindo do store
       projetos: computed(() => store.state.projetos),
