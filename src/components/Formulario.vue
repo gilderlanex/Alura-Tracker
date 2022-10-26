@@ -36,7 +36,7 @@
 
 <script lang="ts">
 import { key } from "@/store";
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 import Temporizador from "./Temporizador.vue";
 
@@ -45,28 +45,31 @@ export default defineComponent({
   components: {
     Temporizador,
   },
-  data() {
-    return {
-      description: "",
-      idProjeto: "",
-    };
-  },
   emits: ["aoSalvarTarefa"],
-  methods: {
-    finalizarTarefa(tempoDecorrido: number): void {
-      this.$emit("aoSalvarTarefa", {
-        duracaoEmSegundos: tempoDecorrido,
-        descricao: this.description,
-        projeto: this.projetos.find(proj => proj.id === this.idProjeto)
-      });
-    },
-  },
   // importando a store através da chave
-  setup() {
+  // Podemos receber como props outros eventos podendo passar o contexto como 2o parametro
+  setup(props, {emit}) {
     const store = useStore(key);
+    const description = ref("");
+    const  idProjeto = ref("");
+    const projetos = computed(() => store.state.projeto.projetos)
+
+
+    const finalizarTarefa = (tempoDecorrido: number): void => {
+      emit("aoSalvarTarefa", {
+        duracaoEmSegundos: tempoDecorrido,
+        descricao: description.value,
+        projeto: projetos.value.find(proj => proj.id == idProjeto.value)
+      });
+      description.value = "";
+    }
+
     return {
       // colocamos dentro de um computed pois a lista é dinâmica precisa ser atualizada.
-      projetos: computed(() => store.state.projeto.projetos),
+      projetos,
+      finalizarTarefa,
+      description,
+      idProjeto
     };
   },
 });
