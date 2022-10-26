@@ -2,11 +2,79 @@
   "projetos": [
     {
       "id": 1,
-      "nome": "json-server"
+      "nome": "Novo projeto Vue"
     },
     {
       "id": 2,
       "nome": "Vue"
+    },
+    {
+      "nome": "Novo projeto Vue",
+      "id": 3
+    },
+    {
+      "id": 4,
+      "nome": "Nova tarefa "
+    },
+    {
+      "nome": "teste de criação",
+      "id": 5
+    },
+    {
+      "nome": "adsfsf",
+      "id": 6
+    },
+    {
+      "id": 7,
+      "nome": "Projeto Angular Js"
+    }
+  ],
+  "tarefas": [
+    {
+      "id": 1,
+      "duracaoEmSegundos": 120,
+      "descricao": "Configuração do ambiente ",
+      "projeto": {
+        "id": 1,
+        "nome": "Vue"
+      }
+    },
+    {
+      "duracaoEmSegundos": 18,
+      "descricao": "Teste de usabilidade",
+      "projeto": {
+        "id": 1,
+        "nome": "json-server"
+      },
+      "id": 2
+    },
+    {
+      "duracaoEmSegundos": 0,
+      "descricao": "czcxzczc",
+      "projeto": {
+        "id": 1,
+        "nome": "json-server"
+      },
+      "id": 3
+    },
+    {
+      "duracaoEmSegundos": 6,
+      "descricao": "",
+      "id": 4
+    },
+    {
+      "duracaoEmSegundos": 1,
+      "descricao": "",
+      "id": 5
+    },
+    {
+      "duracaoEmSegundos": 5,
+      "descricao": "Teste de desenvolvimento",
+      "projeto": {
+        "id": 1,
+        "nome": "Novo projeto Vue"
+      },
+      "id": 6
     }
   ]
 }

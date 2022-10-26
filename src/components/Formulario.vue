@@ -66,7 +66,7 @@ export default defineComponent({
     const store = useStore(key);
     return {
       // colocamos dentro de um computed pois a lista é dinâmica precisa ser atualizada.
-      projetos: computed(() => store.state.projetos),
+      projetos: computed(() => store.state.projeto.projetos),
     };
   },
 });

@@ -48,7 +48,6 @@
 <script lang="ts">
 import { computed, defineComponent } from "vue";
 import { useStore } from "@/store";
-import { EXCLUIR_PROJETO } from "@/store/tipo-multacoes";
 import { OBTER_PROJETOS, REMOVER_PROJETO } from "@/store/tipo-acoes";
 
 export default defineComponent({
@@ -64,7 +63,7 @@ export default defineComponent({
     store.dispatch(OBTER_PROJETOS)
     return {
       // retorna a lista de projetos atualizadas , vindo do store
-      projetos: computed(() => store.state.projetos),
+      projetos: computed(() => store.state.projeto.projetos),
       store
     }
   }

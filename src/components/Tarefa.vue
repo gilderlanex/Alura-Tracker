@@ -1,6 +1,6 @@
 <template>
     <Box>
-        <div class="columns">
+        <div class="columns clicavel" @click="tarefaClicada">
             <div class="column is-4">{{tarefa.descricao || 'Tarefa sem descrição'}}</div>
             <div class="column is-3">{{tarefa.projeto?.nome || 'N/D'}}</div>
             <div class="column">
@@ -24,6 +24,18 @@ export default defineComponent({
             type: Object as PropType<ITarefa>,
             required: true,
         }
+    },
+    emits: ['aoTarefaClicada'],
+    methods : {
+        tarefaClicada() {
+        this.$emit('aoTarefaClicada', this.tarefa);
+        }
     }
 });
 </script>
+
+<style scoped>
+.clicavel {
+    cursor: pointer;
+}
+</style>

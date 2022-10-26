@@ -13,59 +13,59 @@
   </section>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { useStore } from "@/store";
 import { TipoNotificacao } from "@/Interface/INotificacao";
 import useNotificador from '../../hooks/notificador';
 import { ALTERAR_PROJETO, CADASTRAR_PROJETOS } from "@/store/tipo-acoes";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "Formulario",
-  data() {
-    return {
-      nomeDoProjeto: "",
-    };
-  },
   props: {
     id: {
       type: String,
     },
   },
-  mounted() {
-    if (this.id) {
-      const projeto = this.store.state.projetos.find(
-        (proj) => proj.id === this.id
-      );
-      this.nomeDoProjeto = projeto?.nome || "";
-    }
-  },
-  methods: {
-    salvar() {
-      if (this.id) {
-        //edição
-        this.store.dispatch(ALTERAR_PROJETO, {
-          id: this.id,
-          nome: this.nomeDoProjeto,
-        }).then(() => this.successRequests());
-      } else {
-        // Chama a multation para adicionar o projeto na lista de projetos.
-        this.store.dispatch(CADASTRAR_PROJETOS, this.nomeDoProjeto)
-          .then(() => this.successRequests())
-      }
-    },
-    successRequests() {
-      this.nomeDoProjeto = "";
-      this.notificar(TipoNotificacao.SUCESSO, 'Sucesso', 'Projeto Salvo com Sucesso');
-      // fazer redirect
-      this.$router.push("/projetos");
-    }
-  },
-  setup() {
+  setup(props) {
+    const nomeDoProjeto = ref("");
     const store = useStore();
     const { notificar } = useNotificador();
+    // Usamos useRouter para ter acesso as rotas e useRoute para pegar parâmentros em uma rota
+    const router = useRouter();
+
+    if (props.id) {
+      const projeto = store.state.projeto.projetos.find(
+        (proj) => proj.id == props.id
+      );
+      nomeDoProjeto.value = projeto?.nome || "";
+    }
+
+    const salvar = () => {
+      if (props.id) {
+        //edição
+        store.dispatch(ALTERAR_PROJETO, {
+          id: props.id,
+          nome: nomeDoProjeto.value,
+        }).then(() => successRequests());
+      } else {
+        // Chama a multation para adicionar o projeto na lista de projetos.
+        store.dispatch(CADASTRAR_PROJETOS, nomeDoProjeto.value)
+          .then(() => successRequests())
+      }
+    }
+
+    const successRequests = () => {
+      nomeDoProjeto.value = "";
+      notificar(TipoNotificacao.SUCESSO, 'Sucesso', 'Projeto Salvo com Sucesso');
+      // fazer redirect
+      router.push("/projetos");
+    }
+
+
     return {
-      store,
-      notificar
+      nomeDoProjeto,
+      salvar
       // retorna a lista de projetos atualizadas , vindo do store
       // projetos: computed(() => store.state.projetos)
     };

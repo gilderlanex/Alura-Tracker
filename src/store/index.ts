@@ -2,15 +2,17 @@
 
 import { InjectionKey } from "vue";
 import { createStore, Store, useStore as vuexUseStore } from 'vuex';
-import IProjeto from "@/Interface/IProjeto";
 import { INotificacao } from "@/Interface/INotificacao";
-import { ADICIONA_PROJETO, ALTERA_PROJETO, DEFINIR_PROJETOS, EXCLUIR_PROJETO, NOTIFICAR } from "./tipo-multacoes";
-import { ALTERAR_PROJETO, CADASTRAR_PROJETOS, OBTER_PROJETOS, REMOVER_PROJETO } from "./tipo-acoes";
+import { ADICIONA_TAREFA, ALTERA_TAREFA, DEFINIR_TAREFAS, NOTIFICAR } from "./tipo-multacoes";
+import { ALTERAR_TAREFA, CADASTRAR_TAREFA, OBTER_TAREFAS } from "./tipo-acoes";
 import http from "@/http";
+import ITarefas from "@/Interface/ITarefa";
+import { EstadoProjeto, projeto } from "./modulos/projeto";
 
-interface Estado {
-    projetos: IProjeto[],
-    notificacoes: INotificacao[]
+export interface Estado {
+    notificacoes: INotificacao[],
+    tarefas: ITarefas[],
+    projeto: EstadoProjeto,
 }
 
 
@@ -21,28 +23,14 @@ export const key: InjectionKey<Store<Estado>> = Symbol();
 // Definindo estado inicial
 export const store = createStore<Estado>({
     state: {
-        projetos: [],
-        notificacoes: []
+        notificacoes: [],
+        tarefas: [],
+        projeto: {
+            projetos: []
+        },
     },
     // adicionando itens a lista de projetos
     mutations: {
-        [ADICIONA_PROJETO](state, nomeDoProjeto: string) {
-            const projeto = {
-                id: new Date().toISOString(),
-                nome: nomeDoProjeto
-            } as IProjeto
-            state.projetos.push(projeto)
-        },
-        [ALTERA_PROJETO](state, projeto: IProjeto) {
-            const index = state.projetos.findIndex(proj => proj.id == projeto.id);
-            state.projetos[index] = projeto;
-        },
-        [EXCLUIR_PROJETO](state, id: string) {
-            state.projetos = state.projetos.filter(proj => proj.id != id);
-        },
-        [DEFINIR_PROJETOS](state, projetos: IProjeto[]) {
-            state.projetos = projetos
-        },
         [NOTIFICAR](state, novaNotificacao: INotificacao) {
             novaNotificacao.id = new Date().getTime(),
                 state.notificacoes.push(novaNotificacao);
@@ -54,22 +42,34 @@ export const store = createStore<Estado>({
             }, 3000);
 
 
-        }
+        },
+        [DEFINIR_TAREFAS](state, tarefas: ITarefas[]) {
+            state.tarefas = tarefas
+        },
+        [ADICIONA_TAREFA](state, tarefa: ITarefas) {
+            state.tarefas.push(tarefa)
+        },
+        [ALTERA_TAREFA](state, tarefa: ITarefas) {
+            const index = state.tarefas.findIndex(proj => proj.id == tarefa.id);
+            state.tarefas[index] = tarefa; 
+        },
     },
     actions: {
-        [OBTER_PROJETOS]({ commit }) {
-            http.get('projetos').then(resposta => commit(DEFINIR_PROJETOS, resposta.data))
+        [OBTER_TAREFAS] ({commit}){
+            http.get('tarefas').then(response => commit(DEFINIR_TAREFAS, response.data))
         },
-        [CADASTRAR_PROJETOS](context, nomeDoProjeto: string) {
-            return http.post('/projetos', { nome: nomeDoProjeto })
+        [CADASTRAR_TAREFA]({commit}, tarefa: ITarefas) {
+            return http.post('/tarefas', tarefa)
+            // Pega a resposta e adiciona somente a tarefa para não precisar ficar carregando a cada adição
+            .then(resposta => commit(ADICIONA_TAREFA, resposta.data))
         },
-        [ALTERAR_PROJETO](context, projeto: IProjeto) {
-            return http.put(`/projetos/${projeto.id}`, projeto);
+        [ALTERAR_TAREFA] ({commit}, tarefa: ITarefas){
+            return http.put(`/tarefas/${tarefa.id}`, tarefa).then(() => commit(ALTERA_TAREFA, tarefa))
         },
-        [REMOVER_PROJETO]({ commit }, id: string) {
-            return http.delete(`/projetos/${id}`).then( () => commit(EXCLUIR_PROJETO, id));
-        }
             
+    },
+    modules :{
+        projeto
     }
 });
 
