@@ -51,24 +51,29 @@ export const store = createStore<Estado>({
         },
         [ALTERA_TAREFA](state, tarefa: ITarefas) {
             const index = state.tarefas.findIndex(proj => proj.id == tarefa.id);
-            state.tarefas[index] = tarefa; 
+            state.tarefas[index] = tarefa;
         },
     },
     actions: {
-        [OBTER_TAREFAS] ({commit}){
-            http.get('tarefas').then(response => commit(DEFINIR_TAREFAS, response.data))
+        [OBTER_TAREFAS]({ commit }, filtro: string) {
+            let url = 'tarefas';
+
+            if (filtro) {
+                url += '?descricao=' + filtro
+            }
+            http.get(url).then(response => commit(DEFINIR_TAREFAS, response.data))
         },
-        [CADASTRAR_TAREFA]({commit}, tarefa: ITarefas) {
+        [CADASTRAR_TAREFA]({ commit }, tarefa: ITarefas) {
             return http.post('/tarefas', tarefa)
-            // Pega a resposta e adiciona somente a tarefa para não precisar ficar carregando a cada adição
-            .then(resposta => commit(ADICIONA_TAREFA, resposta.data))
+                // Pega a resposta e adiciona somente a tarefa para não precisar ficar carregando a cada adição
+                .then(resposta => commit(ADICIONA_TAREFA, resposta.data))
         },
-        [ALTERAR_TAREFA] ({commit}, tarefa: ITarefas){
+        [ALTERAR_TAREFA]({ commit }, tarefa: ITarefas) {
             return http.put(`/tarefas/${tarefa.id}`, tarefa).then(() => commit(ALTERA_TAREFA, tarefa))
         },
-            
+
     },
-    modules :{
+    modules: {
         projeto
     }
 });

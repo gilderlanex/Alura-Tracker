@@ -5,10 +5,6 @@
       "nome": "Novo projeto Vue"
     },
     {
-      "id": 2,
-      "nome": "Vue"
-    },
-    {
       "nome": "Novo projeto Vue",
       "id": 3
     },
@@ -25,8 +21,8 @@
       "id": 6
     },
     {
-      "id": 7,
-      "nome": "Projeto Angular Js"
+      "id": 8,
+      "nome": "Compositon API Vue"
     }
   ],
   "tarefas": [
@@ -75,6 +71,15 @@
         "nome": "Novo projeto Vue"
       },
       "id": 6
+    },
+    {
+      "duracaoEmSegundos": 3,
+      "descricao": "Teste de uso composition API",
+      "projeto": {
+        "id": 1,
+        "nome": "Novo projeto Vue"
+      },
+      "id": 7
     }
   ]
 }
